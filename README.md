@@ -1,2 +1,1 @@
-# Ger-nciadeConfigura-o
-Gerência de Configuração
+# Gerencia de Configuracao
