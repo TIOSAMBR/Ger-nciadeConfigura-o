@@ -7,3 +7,8 @@ CREATE TABLE IF NOT EXISTS universidade.alunos (
     email VARCHAR(100),
     telefone VARCHAR(20)
 );
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
