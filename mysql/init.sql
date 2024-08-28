@@ -1,0 +1,16 @@
+CREATE DATABASE universidade;
+
+CREATE TABLE IF NOT EXISTS universidade.alunos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(255),
+    cidade VARCHAR(100),
+    estado VARCHAR(100),
+    email VARCHAR(100),
+    telefone VARCHAR(20)
+);
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+

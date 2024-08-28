@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-scripts-init
+data:
+  init.sql: |
+    CREATE DATABASE universidade;
+
+    CREATE TABLE IF NOT EXISTS universidade.alunos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nome VARCHAR(100) NOT NULL,
+        endereco VARCHAR(255),
+        cidade VARCHAR(100),
+        estado VARCHAR(100),
+        email VARCHAR(100),
+        telefone VARCHAR(20)
+    );
+
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+
+  init-db.sh: |
+    #!/bin/bash
+
+    # Espera até que o MySQL esteja pronto para aceitar conexões
+    until mysql -u root -p root -e ";" > /dev/null 2>&1; do
+        echo "MySQL ainda não está pronto, aguardando..."
+        sleep 1
+    done
+
+    # Executa o script SQL de inicialização
+    echo "MySQL está pronto, executando script de inicialização..."
+    mysql -u root -p root < /docker-entrypoint-initdb.d/init.sql

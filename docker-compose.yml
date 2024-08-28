@@ -1,0 +1,47 @@
+version: '3'
+services:
+  php:
+    image: php:8.2-apache
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - mysql
+    volumes:
+      - ./src:/var/www/html
+    command: >
+      /bin/bash -c "
+      apt-get update &&
+      rm /etc/apt/preferences.d/no-debian-php &&
+      apt-get install -y php-mysql &&
+      docker-php-ext-install mysqli &&
+      docker-php-ext-enable mysqli &&
+      echo 'ServerName localhost' >> /etc/apache2/apache2.conf &&
+      exec apache2-foreground
+      "
+    networks:
+      - my-network
+
+  mysql:
+    image: mysql:5.7
+    command: ["--default-authentication-plugin=mysql_native_password", "--init-file=/docker-entrypoint-initdb.d/init.sql"]
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: universidade
+    volumes:
+      - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
+    restart: always
+    networks:
+      - my-network
+
+volumes:
+  mysql-data:
+  
+networks:
+  my-network:
+    driver: bridge
+
